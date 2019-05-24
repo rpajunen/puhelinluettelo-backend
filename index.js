@@ -17,14 +17,14 @@ app.get('/api/info', (req, res) => {
   Person.find({})
     .then(persons => {
       res.send(`<div><p>Puhelinluettelossa on ${persons.length} henkilön tiedot</p><p>${new Date()}</p></div>`)
-    });
+    })
 })
 
 app.get('/api/persons', (req, res) => {
   Person.find({})
     .then(persons => {
       res.json(persons.map(person => person.toJSON()))
-    });
+    })
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -36,8 +36,6 @@ app.get('/api/persons/:id', (req, res, next) => {
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-
-  console.log('yes inside route')
   const body = req.body
 
   const person = {
@@ -54,7 +52,7 @@ app.put('/api/persons/:id', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(result => {
+    .then(() => {
       res.status(204).end()
     })
     .catch(error => next(error))
@@ -89,9 +87,7 @@ const unknownEndpoint = (req, res) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, req, res, next) => {
-  console.error(error.message)
-
-  if (error.name === 'CastError' && error.kind == 'ObjectId') {
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return res.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
     return res.status(400).json({ error: error.message })
@@ -102,6 +98,7 @@ const errorHandler = (error, req, res, next) => {
 
 app.use(errorHandler)
 
+// eslint-disable-next-line
 const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
