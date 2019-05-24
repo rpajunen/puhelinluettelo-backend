@@ -16,7 +16,7 @@ app.use(morgan(':method :url :body :status :res[content-length] - :response-time
 app.get('/api/info', (req, res) => {
   Person.find({})
     .then(persons => {
-      res.send(`<div><p>Puhelinluettelossa on ${persons.length} henkilon tiedot</p><p>${new Date()}</p></div>`)
+      res.send(`<div><p>Puhelinluettelossa on ${persons.length} henkilön tiedot</p><p>${new Date()}</p></div>`)
     });
 })
 
